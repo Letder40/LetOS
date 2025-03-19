@@ -76,27 +76,52 @@ void terminal_putentryat(char c, color color, size_t x, size_t y) {
     terminal_buffer[index] = vga_entry(c, color);
 }
 
+void terminal_scroll_down() {
+    size_t i = 0;
+    while (i < VGA_WIDTH)
+        terminal_buffer[i++] = 0;
+
+    size_t x = 0;
+    while (i < VGA_WIDTH * VGA_WIDTH)
+        terminal_buffer[x++] = terminal_buffer[i++];
+
+    terminal_row -= 2;
+}
+
 void terminal_putchar(char c) {
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-    // overflow
+
     if (++terminal_column == VGA_WIDTH) {
         terminal_column = 0;
         if (++terminal_row == VGA_HEIGHT)
-            terminal_row = 0;
+            terminal_scroll_down();
     }
 }
 
+void terminal_newline() {
+    if (++terminal_row == VGA_HEIGHT)
+        terminal_scroll_down();
+
+    terminal_column = 0;
+}
+
 void terminal_write(const char* data, size_t size) {
-    for (size_t i = 0; i < size; i++)
-        terminal_putchar(data[i]);
+    for (size_t i = 0; i < size; i++) {
+        if (data[i] == '\n')
+            terminal_newline();
+        else 
+            terminal_putchar(data[i]);
+    }
 }
 
 void terminal_writestring(const char* data) {
     terminal_write(data, strlen(data));
 }
 
+#define BANNER "88                                 ,ad8888ba,     ad88888ba   \n88                        ,d      d8\"'    `\"8b   d8\"     \"8b  \n88                        88     d8'        `8b  Y8,          \n88           ,adPPYba,  MM88MMM  88          88  `Y8aaaaa,    \n88          a8P_____88    88     88          88    `\"\"\"\"\"8b,  \n88          8PP\"\"\"\"\"\"\"    88     Y8,        ,8P          `8b  \n88          \\\"8b,   ,aa    88,     Y8a.    .a8P   Y8a     a8P  \n88888888888  `\"Ybbd8\"'    \"Y888    `\"Y8888Y\"'     \"Y88888P\"   \n"
+
 void kernel_main(void) {
     terminal_initialialize();
-
-    terminal_writestring("LetOS started..\n");
+    
+    terminal_writestring(BANNER);
 }
