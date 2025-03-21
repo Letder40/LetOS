@@ -1,0 +1,5 @@
+CompileFlags:
+  Add: [
+    "--sysroot=/home/letder/workspace/cesur/project/os/letos/letos/sysro/sysroot",
+    "--target=i686-elf"
+  ]
