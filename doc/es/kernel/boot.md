@@ -6,9 +6,54 @@ El bootloader es una pieza de software fundamental en cualquier sistema operativ
 ## Estandar multiboot
 El estandar multiboot define una interfaz de operación entre el boot loader y el kernel y permitira que un bootloader pueda leer operar interactuar con el sistema.
 
+### Header mutiboot y llamada al kernel
+
+```asm
+# Multiboot constants
+.set ALIGN,     1<<0                # Align loaded modules on page boundaries
+.set MEMINFO,   1<<1                # memmory map
+.set FLAGS,     ALIGN | MEMINFO     # Multiboot flags
+.set MAGIC,     0x1BADB002          # Number defined by multiboot standard for header recognition
+.set CHECKSUM,  -(MAGIC + FLAGS)    # Number defined by multiboot standard for header recognition
+
+# Multiboot header
+.section .multiboot
+.align 4
+.long MAGIC
+.long FLAGS
+.long CHECKSUM
+
+# Set esp & stack
+.section .bss
+.align 16
+stack_bottom:
+.skip 16384 # 16 KiB for the stack
+stack_top:
+
+.section .text
+.global _start
+.type _start, @function
+_start:
+    # ESP is the register that points to the stack 
+    movl $stack_top, %esp
+
+    call kernel_main
+
+    # disable interuptions
+    cli
+    # Infinite loop: 
+1:  hlt
+    # wait for interuptions
+    # check if interruption bypass cli && go back to hlt
+    jmp 1b
+
+.size _start, . - _start # set size for start simmbol, current position - start
+```
+
 Es posible escribir un bootloader propio cosa que ya he hecho para tomar una primera toma de contacto pero nunca será mejor que un bootloader estandar que permita cargar el sistema operativo de manera eficiente y manejar multiples sistemas operativos.
 
 ### boot sector propio
+Este tiene sintaxis de intel sin prefijar debido a que empecé con esta sintaxis en un principio, acabe cambiando a sintaxís de at&t pues es el estandar en GNU.
 
 ```asm
 .intel_syntax noprefix
