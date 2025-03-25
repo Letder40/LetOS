@@ -33,9 +33,9 @@ void terminal_writestring(const char* data);
 En en el rango de direcciones de memoria en el que estoy trabajando se espera que cada entrada del array sea un uint16_t, en otras palabras 16 bits por cada entrada:
 
 **Entrada buffer VGA**:
-+ **8bits**+: char ascii.
++ **8bits**: char ascii.
 + **8bits**: color.
-    + **4bits*+: foreground.
+    + **4bits**: foreground.
     + **4bits**: background.
 
 
