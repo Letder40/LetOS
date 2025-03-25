@@ -31,7 +31,7 @@ iso: build
 	bash $(SCRIPTS)/iso.sh
 
 qemu: iso
-	qemu-system-$(ARCH) -cdrom letos.iso
+	qemu-system-$(ARCH) -cdrom letos.iso -monitor stdio
 
 clean:
 	for PROJECT in $(PROJECTS); do \
