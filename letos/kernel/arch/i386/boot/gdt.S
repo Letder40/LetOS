@@ -1,10 +1,3 @@
-# Multiboot constants
-.set ALIGN,     1<<0                # Align loaded modules on page boundaries
-.set MEMINFO,   1<<1                # memmory map
-.set FLAGS,     ALIGN | MEMINFO     # Multiboot flags
-.set MAGIC,     0x1BADB002          # Number defined by multiboot standard for header recognition
-.set CHECKSUM,  -(MAGIC + FLAGS)    # Number defined by multiboot standard for header recognition
-
 # GDT constants
 
 # Flags 
@@ -33,19 +26,6 @@
 
 .set GRANULARITY, 0b11001111
 
-# Multiboot header
-.section .multiboot
-.align 4
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
-
-# Set esp & stack
-.section .bss
-.align 16
-stack_bottom:
-.skip 16384 # 16 KiB for the stack
-stack_top:
 
 .section .rodata
 gdt:
@@ -92,9 +72,7 @@ gdt_descriptor:
 
 .section .text
 .code32
-.global _start
-
-.type update_segments_registers, @function
+.global load_gdt
 update_segments_registers:
     mov $0x10, %ax # index of kernel mode data segment
     # data
@@ -104,26 +82,10 @@ update_segments_registers:
     mov %ax, %gs # extra segment reg
     mov %ax, %ss # stack segment reg
     # code
-    ljmp $0x08, $.kernel # reload code segment ...
+    ljmp $0x08, $rt # reload code segment ...
+rt: ret
 
-.type _start, @function
-_start:
-    # ESP is the register that points to the stack 
-    movl $stack_top, %esp
-
-    # load gdt
+.type load_gdt, @function
+load_gdt:
     lgdt [gdt_descriptor]
     jmp update_segments_registers
-
-    .kernel:
-    call kernel_main
-
-    # disable interuptions
-    cli
-    # Infinite loop: 
-1:  hlt
-    # wait for interuptions
-    # check if interruption bypass cli && go back to hlt
-    jmp 1b
-
-.size _start, . - _start # set size for start simmbol, current position - start
