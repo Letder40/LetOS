@@ -26,8 +26,6 @@ _start:
     # ESP is the register that points to the stack 
     movl $stack_top, %esp
 
-    call load_gdt
-
     call kernel_main
 
     # disable interuptions
