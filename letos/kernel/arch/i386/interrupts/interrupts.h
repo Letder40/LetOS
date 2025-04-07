@@ -15,4 +15,6 @@ const uint8_t KERNEL_INT  = INT_GATE  | DPL_KERNEL_MODE << 5 | 0x1 << 7;
 
 void idt_set_descriptor(uint8_t, void*, uint8_t);
 
+void irq_unmask(uint8_t);
+
 #endif

@@ -10,3 +10,4 @@ BOOTDIR = /boot
 LIBDIR = /usr/lib
 INCLUDEDIR = /usr/include
 CFLAGS = -O2 -g
+DEBUG = false

@@ -16,6 +16,7 @@ export INCLUDEDIR=$PREFIX/include
 export CFLAGS='-O2 -g'
 
 export SYSROOT="$(pwd)/sysroot"
+export DEBUG="false"
 
 CC="$CC --sysroot=$SYSROOT"
 if echo "$TARGET" | grep -Eq -- '-elf($|-)'; then
@@ -36,4 +37,5 @@ BOOTDIR = $BOOTDIR
 LIBDIR = $LIBDIR
 INCLUDEDIR = $INCLUDEDIR
 CFLAGS = $CFLAGS
+DEBUG = $DEBUG
 EOF

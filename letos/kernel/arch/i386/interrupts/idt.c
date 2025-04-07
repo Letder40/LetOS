@@ -6,25 +6,21 @@
 #define KERNEL_CS 0x08 // kernel code segment selector
 #define MAX_INTERRUPTS 256
 
-void load_idt();
-
 typedef struct {
-    uint16_t isr_low; // interrupt service rutine addr low
-    uint16_t gdt_selector; // gdt code segment selector
-    uint8_t reserved; // always 0
+    uint16_t isr_low;        // interrupt service rutine addr low
+    uint16_t gdt_selector;   // gdt code segment selector
+    uint8_t reserved;        // always 0
     uint8_t gate_attributes; // 4bits gate type, 1b not used, 2b DPL, 1b present
-    uint16_t isr_high; // ... high
-}__attribute__((packed)) idt_entry_t;
+    uint16_t isr_high;       // ... high
+} __attribute__((packed)) idt_entry_t;
 
 typedef struct {
     uint16_t limit;
     uint32_t base;
-}__attribute__((packed)) idtr_t;
-
+} __attribute__((packed)) idtr_t;
 
 __attribute__((aligned(0x10)))
 static idt_entry_t idt[256];
-
 static idtr_t idtr;
 
 __attribute__((noreturn))

@@ -23,6 +23,12 @@ headers: $(MAKE_CONFIG)
 	done
 
 build: headers
+ifeq ($(DEBUG), true)
+	echo "#define _DEBUG true"  > kernel/include/kernel/debug.h
+else
+	echo "#define _DEBUG false" > kernel/include/kernel/debug.h
+endif
+
 	for PROJECT in $(PROJECTS); do \
 		(cd $$PROJECT && DESTDIR=$(SYSROOT) $(MAKE) install); \
 	done
