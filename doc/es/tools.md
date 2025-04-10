@@ -85,7 +85,7 @@ mkdir build-gcc
 pushd buid-gcc
 ../configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++
 make all-gcc
-````
+```
 **Opciones**
 1. **--enable-languages**: Lenguajes a habilitar en este caso he habilitado también c++ pero no estoy seguro de que lo vaya a usar, quizás para abstracciones de alto nivel...
 

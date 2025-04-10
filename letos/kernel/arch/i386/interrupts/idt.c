@@ -1,10 +1,14 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "./interrupts.h"
+#include "../include/interrupts.h"
 
 #define KERNEL_CS 0x08 // kernel code segment selector
 #define MAX_INTERRUPTS 256
+
+const uint8_t KERNEL_TRAP = TRAP_GATE | DPL_KERNEL_MODE << 5 | 0x1 << 7;
+const uint8_t USER_TRAP   = TRAP_GATE | DPL_USER_MODE   << 5 | 0x1 << 7;
+const uint8_t KERNEL_INT  = INT_GATE  | DPL_KERNEL_MODE << 5 | 0x1 << 7;
 
 typedef struct {
     uint16_t isr_low;        // interrupt service rutine addr low
@@ -39,6 +43,8 @@ void idt_set_descriptor(uint8_t index, void* isr, uint8_t gate_attributes) {
     idt_entry->isr_high = (uint32_t)isr >> 16;
 }
 
+extern void keyboard_isr();
+
 void load_idt() {
     idtr.base = (uintptr_t)&idt[0];
     idtr.limit = (uint16_t)sizeof(idt_entry_t) * MAX_INTERRUPTS - 1;
@@ -46,6 +52,8 @@ void load_idt() {
     // load idt with generic interrupts
     for (int i = 0; i < MAX_INTERRUPTS; i++)
         idt_set_descriptor((uint8_t)i, (void*)&generic_isr, KERNEL_TRAP);
+
+    idt_set_descriptor((uint8_t)33, (void*)&keyboard_isr, KERNEL_TRAP);
     
     __asm__ volatile ("lidt %0" :: "m"(idtr));
     __asm__ volatile ("sti");

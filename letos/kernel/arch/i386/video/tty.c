@@ -11,6 +11,8 @@ size_t strlen(const char* str) {
     return len;
 }
 
+void terminal_writestring(const char*);
+
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
 static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;

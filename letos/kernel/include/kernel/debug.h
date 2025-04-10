@@ -1,1 +1,1 @@
-#define _DEBUG false
+#define _DEBUG true

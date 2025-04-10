@@ -84,5 +84,6 @@ void irq_unmask(uint8_t irq) {
     }
 
     value = inb(port) & ~(1 << irq);
+    io_wait();
     outb(port, value);
 }

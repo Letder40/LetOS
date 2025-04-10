@@ -14,6 +14,6 @@ static inline uint8_t inb(uint16_t port) {
     return value;
 }
 
-#define io_wait() outb(0x80, 0x00)
+#define io_wait() outb(0x80, 0x00);
 
 #endif
