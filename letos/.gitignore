@@ -1,4 +1,4 @@
 *.iso
 isodir
 sysroot
-make.config
+config.mk
