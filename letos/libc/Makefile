@@ -20,6 +20,8 @@ LIBK_CFLAGS:=$(LIBK_CFLAGS) $(KERNEL_ARCH_CFLAGS)
 FREE_OBJS=\
 $(ARCH_FREEOBJS) \
 string/strlen.o \
+stdio/printf.o \
+stdio/putchar.o \
 
 # Hosted objects
 HOSTED_OBJS=\
@@ -29,7 +31,7 @@ OBJS=\
 $(FREE_OBJS) \
 $(HOSTED_OBJS) \
 
-LIBK_OBJS=$(FREEOBJS:.o=.libk.o)
+LIBK_OBJS=$(FREE_OBJS:.o=.libk.o)
 
 #BINARIES=libc.a libk.a, to early for libc.a
 BINARIES=libk.a
@@ -44,11 +46,11 @@ libc.a: $(OBJS)
 libk.a: $(LIBK_OBJS)
 	$(AR) rcs $@ $(LIBK_OBJS)
 
-%.o: %.c
-	$(CC) -MD -c -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS) $<
+%.libk.o: %.c
+	$(CC) -MD -c -o $@ -std=gnu11 $(CFLAGS) $<
 
-%.o: %.S
-	$(CC) -MD -c -o $@ $(CFLAGS) $(CPPFLAGS) $<
+%.libk.o: %.S
+	$(CC) -MD -c -o $@ $(CFLAGS) $<
 
 clean:
 	rm -f $(BINARIES) *.a
