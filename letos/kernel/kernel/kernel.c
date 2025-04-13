@@ -1,9 +1,11 @@
-#include <kernel/tty.h>
-#include <kernel/gdt.h>
-#include <kernel/interrupts.h>
-#include <stdio.h>
+#include <stdint.h>
 
-extern char input_buffer[255];
+#include <letos/tty.h>
+#include <letos/gdt.h>
+#include <letos/interrupts.h>
+#include <letos/keymaps.h>
+
+extern void kernel_shell();
 
 void kernel_main(void) {
     terminal_initialize();
@@ -17,11 +19,9 @@ void kernel_main(void) {
     pic_init();
     kernel_debug("[PIC MASTER] PIC REMMAPED TO 0x20\n");
     kernel_debug("[PIC SLAVE]  PIC REMMAPED TO 0x28\n");
+
     irq_unmask(1);
     kernel_debug("[IRQ 1] keyboard INITIALIZED\n");
 
-    while (1) {
-        printf("test");
-        asm volatile ("hlt");
-    }
+    kernel_shell(); 
 }

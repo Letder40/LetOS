@@ -24,9 +24,9 @@ headers: $(MAKE_CONFIG)
 
 build: headers
 ifeq ($(DEBUG), true)
-	echo "#define _DEBUG true"  > kernel/include/kernel/debug.h
+	echo "#define _DEBUG true"  > kernel/include/letos/debug.h
 else
-	echo "#define _DEBUG false" > kernel/include/kernel/debug.h
+	echo "#define _DEBUG false" > kernel/include/letos/debug.h
 endif
 
 	for PROJECT in $(PROJECTS); do \
