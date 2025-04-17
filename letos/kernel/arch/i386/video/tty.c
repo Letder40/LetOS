@@ -54,7 +54,7 @@ void terminal_scroll_down() {
     while (i < VGA_WIDTH * VGA_WIDTH)
         terminal_buffer[x++] = terminal_buffer[i++];
 
-    terminal_row -= 2;
+    terminal_row -= 1;
 }
 
 void terminal_putchar(char c) {
