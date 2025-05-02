@@ -19,9 +19,14 @@ LIBK_CFLAGS:=$(LIBK_CFLAGS) $(KERNEL_ARCH_CFLAGS)
 # Freestanding objects
 FREE_OBJS=\
 $(ARCH_FREEOBJS) \
-string/strlen.o \
 stdio/printf.o \
 stdio/putchar.o \
+string/strlen.o \
+string/strtok.o \
+string/strcmp.o \
+string/memcpy.o \
+string/memset.o \
+stdlib/atoi.o \
 
 # Hosted objects
 HOSTED_OBJS=\

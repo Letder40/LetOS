@@ -10,8 +10,7 @@ typedef enum {
     SPC = 32,
 
     CTR = 200,
-    SHL = 202,
-    SHR = 202,
+    SHF = 202,
     ALT = 203,
     BKM = 204,
     BKN = 205,
@@ -43,7 +42,7 @@ typedef enum {
     ESC, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',   '\'', IEXCL, BSP, \
     TAB, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',    '`',   '+', RET, \
     CTR, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',   Ñ,  ACUTE,   º, \
-    SHL,   Ç, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.',    '-', SHR, \
+    SHF,   Ç, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.',    '-', SHF, \
     '*', ALT, SPC, BKM, \
     F01, F02, F03, F04, F05, F06, F07, F08, F09, F10, \
     BKN, NUL, \
@@ -54,6 +53,23 @@ typedef enum {
     NUL, NUL, \
     '<', \
     F11, F12 \
+
+#define KEYMAP_ES_SHIFTED \
+    NUL, \
+    ESC, '!', '"', '\xB7', '$', '%', '&', '/', '(', ')', '=', '?', '\xBF', BSP, \
+    TAB, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '^', '*', RET, \
+    CTR, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '\xD1', '\xA8', '\xAA', \
+    SHF, '\xC7', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ';', ':', '_', SHF, \
+    '*', ALT, ' ', BKM, \
+    F01, F02, F03, F04, F05, F06, F07, F08, F09, F10, \
+    BKN, NUL, \
+    '7', '8', '9', '-', \
+    '4', '5', '6', '+', \
+    '1', '2', '3', \
+    '0', '.', \
+    NUL, NUL, \
+    '<', \
+    F11, F12
 
 #define KEYMAP_ES_PRINTABLE_BMAP \
     0, \

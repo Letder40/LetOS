@@ -58,8 +58,8 @@ int vprintf(const char* restrict format, va_list args) {
                 d /= 10;
             }
 
-            for (int len = i - 1; i >= 0; i--) {
-                putchar(buf[len]);
+            while (i > 0) {
+                putchar(buf[--i]);
                 printed_chars++;
             }
 
