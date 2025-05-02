@@ -11,6 +11,7 @@
 
 extern volatile uint8_t input_buffer[256];
 extern volatile uint8_t input_read_index;
+extern volatile uint8_t input_write_index;
 
 static char keymap_unshifted[] = { KEYMAP_ES };
 static char keymap_shifted[] = { KEYMAP_ES_SHIFTED };
@@ -31,12 +32,27 @@ void shift_keymap() {
 
 // Builtins
 
+#define OUTPUT_LEN 255
+
+char last_output[OUTPUT_LEN] = {0};
+
+void set_output(char* output, bool print) {
+    strcpy(last_output, output);
+    if (print) {
+        printf("\n%s", output);
+    }
+}
+
+void last() {
+    printf("\n%s", last_output);
+}
+
 void echo(char* str) {
     if (str == NULL) {
         printf("\n");
         return;
     }
-    printf("\n%s", str);
+    set_output(str, true);
 }
 
 void clear() {
@@ -44,9 +60,19 @@ void clear() {
 }
 
 void calc(char** args) {
-    int n1 = atoi(args[0]); 
+    int n1;
+    if (!strcmp(args[0], "last"))
+        n1 = atoi(last_output);
+    else 
+        n1 = atoi(args[0]); 
+
+    int n2;
+    if (!strcmp(args[2], "last"))
+        n2 = atoi(last_output);
+    else 
+        n2 = atoi(args[2]); 
+
     char operator = *args[1]; 
-    int n2 = atoi(args[2]); 
     int result = 0;
 
     switch (operator) {
@@ -60,20 +86,50 @@ void calc(char** args) {
             result = n1 * n2;
             break;
         case '/':
+            if (n1 == 0 || n2 == 0) {
+                echo("Division by 0 leads to undefined behaviour ;D");
+                return;
+            }
             result = n1 / n2;
             break;
         case '%':
             result = n1 % n2;
             break;
         default:
-            printf("invalid operation");
+            echo("invalid operation");
             return;
     }
 
+    int d = result;
+    char buf[33] = {0};
+    int i = 32;
+
+    buf[i--] = '\0';
+
+    if (d == 0) {
+        set_output("0", false);
+        goto print_result;
+    }
+
+    if (d < 0) {
+        buf[i--] = '-';
+    }
+    
+    while (d > 0) {
+        buf[i--] = (d % 10) + '0';
+        d /= 10;
+    }
+
+    char* num_start = (char*) buf;
+    while (!*num_start) num_start++; 
+
+    set_output(num_start, false);
+
+print_result:
     printf("\n%d %c %d = %d\n", n1, operator, n2, result);
 }
 
-#define COMAND_LEN 255
+#define COMAND_LEN OUTPUT_LEN
 static char command_buffer[COMAND_LEN];
 static uint8_t command_write_idx;
 
@@ -103,9 +159,11 @@ void check_command() {
     char* command = strtok(command_buffer, ' ');
 
     if (!strcmp(command, "echo")) {
-        echo(strtok(NULL, 0));
+        echo(strtok(NULL, '\0'));
     } else if (!strcmp(command, "clear")) {
         clear();
+    } else if (!strcmp(command, "last")) {
+        last();
     } else if (!strcmp(command, "calc")) {
         char* args[3];
         process_args(3, args);
@@ -122,47 +180,49 @@ void check_command() {
 
 void kernel_shell() {
     printf("> ");
-    while (1) {
+    for(;;) {
         asm volatile ("hlt");
-        uint8_t scancode = input_buffer[input_read_index++];
+        while (input_read_index != input_write_index) {
+            uint8_t scancode = input_buffer[input_read_index++];
+            // release
+            if ((scancode & 0x80) == 0x80) {
+                scancode = scancode ^ 0x80;
+                uint8_t ch = keymap[scancode];
+                if (ch == SHF)
+                    shift_keymap();
+                continue;
+            }  
 
-        // release
-        if ((scancode & 0x80) == 0x80) {
-            scancode = scancode ^ 0x80;
+            // press
             uint8_t ch = keymap[scancode];
-            if (ch == SHF)
+            switch (ch) {
+            case BKM:
                 shift_keymap();
-            continue;
-        }  
-
-        // press
-        uint8_t ch = keymap[scancode];
-        switch (ch) {
-        case BKM:
-            shift_keymap();
-            break;
-        case SHF:
-            shift_keymap();
-            break;
-        case RET:
-            check_command();
-            putchar('\n');
-            printf("> ");
-            break;
-        case TAB:
-            putchar('\t');
-            break;
-        case BSP:
-            if (command_write_idx != 0) command_write_idx--;
-            putchar('\b');
-            break;
-        default:
-            if (!keymap_printable[scancode]) {
-                continue; 
+                break;
+            case SHF:
+                shift_keymap();
+                break;
+            case RET:
+                check_command();
+                putchar('\n');
+                printf("> ");
+                break;
+            case TAB:
+                putchar('\t');
+                break;
+            case BSP:
+                if (command_write_idx != 0) command_write_idx--;
+                putchar('\b');
+                break;
+            default:
+                if (!keymap_printable[scancode] || !keymap[scancode]) {
+                    printf("?");
+                    continue; 
+                }
+                command_write(ch);
+                printf("%c", ch);
+                break;
             }
-            command_write(ch);
-            printf("%c", ch);
-            break;
         }
     }
 }

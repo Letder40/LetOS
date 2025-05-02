@@ -24,6 +24,7 @@ stdio/putchar.o \
 string/strlen.o \
 string/strtok.o \
 string/strcmp.o \
+string/strcpy.o \
 string/memcpy.o \
 string/memset.o \
 stdlib/atoi.o \
