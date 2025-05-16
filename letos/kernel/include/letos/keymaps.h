@@ -30,46 +30,52 @@ typedef enum {
 } SPECIAL_KEYS;
 
 typedef enum {
-    IEXCL = 161,
-    Ñ = 209,
-    ACUTE = 39,
-    º = 186,
-    Ç = 199,
+    IEXC = 161,   // ¡
+    N_TL = 209,   // ñ / Ñ (same code)
+    ACUT = 39,    // '
+    MASC = 186,   // º (masculine ordinal)
+    CEDL = 199,   // Ç
+    QINV = 191,   // ¿ (inverted question mark)
+    DIER = 168,   // ¨ (diaeresis)
+    F_ORD = 170,  // ª (feminine ordinal)
+    CARE = 94,    // ^ (caret)
+    BULL = 183,   // · (middle dot)
+    DEGR = 176    // ° (degree)
 } SPECIAL_CHARS;
 
 #define KEYMAP_ES \
-    NUL, \
-    ESC, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',   '\'', IEXCL, BSP, \
-    TAB, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',    '`',   '+', RET, \
-    CTR, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',   Ñ,  ACUTE,   º, \
-    SHF,   Ç, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.',    '-', SHF, \
-    '*', ALT, SPC, BKM, \
-    F01, F02, F03, F04, F05, F06, F07, F08, F09, F10, \
-    BKN, NUL, \
-    '7', '8', '9', '-', \
-    '4', '5', '6', '+', \
-    '1', '2', '3', \
-    '0', '.', \
-    NUL, NUL, \
-    '<', \
-    F11, F12 \
+    NUL,                                                                                    \
+    ESC,  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '0',  ACUT, IEXC, BSP,      \
+    TAB,  'q',  'w',  'e',  'r',  't',  'y',  'u',  'i',  'o',  'p',  '`',  '+',   RET,      \
+    CTR,  'a',  's',  'd',  'f',  'g',  'h',  'j',  'k',  'l',  N_TL, ACUT, MASC,            \
+    SHF,  CEDL, 'z',  'x',  'c',  'v',  'b',  'n',  'm',  ',',  '.',  '-',  SHF,             \
+    '*',  ALT,  SPC,  BKM,                                                                   \
+    F01,  F02,  F03,  F04,  F05,  F06,  F07,  F08,  F09,  F10,                               \
+    BKN,  NUL,                                                                               \
+    '7',  '8',  '9',  '-',                                                                  \
+    '4',  '5',  '6',  '+',                                                                  \
+    '1',  '2',  '3',                                                                        \
+    '0',  '.',                                                                              \
+    NUL,  NUL,                                                                              \
+    '<',                                                                                    \
+    F11,  F12
 
 #define KEYMAP_ES_SHIFTED \
-    NUL, \
-    ESC, '!', '"', '\xB7', '$', '%', '&', '/', '(', ')', '=', '?', '\xBF', BSP, \
-    TAB, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '^', '*', RET, \
-    CTR, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '\xD1', '\xA8', '\xAA', \
-    SHF, '\xC7', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ';', ':', '_', SHF, \
-    '*', ALT, ' ', BKM, \
-    F01, F02, F03, F04, F05, F06, F07, F08, F09, F10, \
-    BKN, NUL, \
-    '7', '8', '9', '-', \
-    '4', '5', '6', '+', \
-    '1', '2', '3', \
-    '0', '.', \
-    NUL, NUL, \
-    '<', \
-    F11, F12
+    NUL,                                                                                    \
+    ESC,  '!',  '"',  BULL, '$',  '%',  '&',  '/',  '(',  ')',  '=',  '?',  QINV, BSP,      \
+    TAB,  'Q',  'W',  'E',  'R',  'T',  'Y',  'U',  'I',  'O',  'P',  CARE, '*',   RET,      \
+    CTR,  'A',  'S',  'D',  'F',  'G',  'H',  'J',  'K',  'L',  N_TL, DIER, F_ORD,           \
+    SHF,  CEDL, 'Z',  'X',  'C',  'V',  'B',  'N',  'M',  ';',  ':',  '_',  SHF,             \
+    '*',  ALT,  SPC,  BKM,                                                                   \
+    F01,  F02,  F03,  F04,  F05,  F06,  F07,  F08,  F09,  F10,                               \
+    BKN,  NUL,                                                                               \
+    '7',  '8',  '9',  '-',                                                                  \
+    '4',  '5',  '6',  '+',                                                                  \
+    '1',  '2',  '3',                                                                        \
+    '0',  '.',                                                                              \
+    NUL,  NUL,                                                                              \
+    '<',                                                                                    \
+    F11,  F12
 
 #define KEYMAP_ES_PRINTABLE_BMAP \
     0, \
@@ -77,7 +83,7 @@ typedef enum {
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, \
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, \
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, \
-    0, 0, 1, 0, \
+    1, 0, 1, 0, \
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
     0, 0, \
     1, 1, 1, 1, \
@@ -86,6 +92,7 @@ typedef enum {
     1, 1, \
     0, 0, \
     1, \
-    0, 0 \
+    0, 0
 
 #endif
+

@@ -9,6 +9,8 @@
 #include <letos/tty.h>
 #include <letos/keymaps.h>
 
+#include <letos/debug.h>
+
 extern volatile uint8_t input_buffer[256];
 extern volatile uint8_t input_read_index;
 extern volatile uint8_t input_write_index;
@@ -96,6 +98,7 @@ void calc(char** args) {
             result = n1 % n2;
             break;
         default:
+            printf("operator: %c\n", operator);
             echo("invalid operation");
             return;
     }
@@ -216,7 +219,12 @@ void kernel_shell() {
                 break;
             default:
                 if (!keymap_printable[scancode] || !keymap[scancode]) {
+#ifdef _DEBUG
+                    printf("\nUndetected scancode: %d\n", scancode);
+                    printf("\nTrying to print scancode: %c\n", keymap[scancode]);
+#else
                     printf("?");
+#endif
                     continue; 
                 }
                 command_write(ch);

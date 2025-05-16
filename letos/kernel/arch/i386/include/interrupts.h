@@ -13,17 +13,17 @@ void idt_set_descriptor(uint8_t, void*, uint8_t);
 
 void irq_unmask(uint8_t);
 
-#define ISR_WRAPPER(isr_name, handler)                                         \
-    void isr_name(void) {                                                      \
-        asm volatile("pusha\n\t"                                               \
-                     "call *%0\n\t"                                            \
-                     "movb $0x20, %%al\n\t"                                    \
-                     "outb %%al, $0x20\n\t"                                    \
-                     "popa\n\t"                                                \
-                     "iret\n\t"                                                \
-                     :                                                         \
-                     : "r"(handler)                                            \
-                     : "eax");                                                 \
+#define ISR_WRAPPER(isr_name, handler)           \
+    void isr_name(void) {                        \
+        asm volatile("pusha\n\t"                 \
+                     "call *%0\n\t"              \
+                     "movb $0x20, %%al\n\t"      \
+                     "outb %%al, $0x20\n\t"      \
+                     "popa\n\t"                  \
+                     "iret\n\t"                  \
+                     :                           \
+                     : "r"(handler)              \
+                     : "eax");                   \
     }
 
 #endif
