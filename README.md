@@ -6,4 +6,4 @@
 ![boot](/.demo/boot.png)
 
 ### VGA buffer and basic operations (Kernel)
-![terminal](/.demo/terminal.png)
+![terminal](/.demo/kshell.png)
